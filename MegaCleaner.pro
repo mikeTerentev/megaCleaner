@@ -27,24 +27,20 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    dialog.cpp \
-    dataparser.cpp \
-    resultwindow.cpp
+    dataparser.cpp
 
 
 HEADERS += \
         mainwindow.h \
-    dialog.h \
-    dataparser.h \
-    resultwindow.h
+    dataparser.h
 
 
 FORMS += \
     dialog.ui \
-    mainwindow.ui \
-    resultwindow.ui
+    mainwindow.ui
 
 # Default rules for deployment.
+
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target

@@ -51,6 +51,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="pushGoBack">
+      <property name="text">
+       <string>Go back</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QPushButton" name="pushScanDir">
       <property name="text">
        <string>ScanDirecotory</string>

@@ -26,7 +26,7 @@ void dataParser::dfs(QString const& path){
     QFileInfoList list = dir.entryInfoList();
     for (QFileInfo file_info : list)
     {
-        if (file_info != list[0] && file_info != list[1])
+        if (file_info.fileName() !=".." && file_info.fileName() !=".")
         {
             if (file_info.isDir())
             {

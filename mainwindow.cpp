@@ -52,27 +52,20 @@ void main_window::makeFileSystem()
     QDir d(currentDir);
     QFileInfoList list = d.entryInfoList();
     QList<QTreeWidgetItem *> items;
-    for (QFileInfo file_info : list)
-    {
-        if (file_info.fileName() == "..")  continue;
+    for (QFileInfo file_info : list){
+        if (file_info.fileName() == "..")
+            continue;
             QTreeWidgetItem* item = new QTreeWidgetItem(ui->treeWidget);
-            if (file_info.fileName() == ".")
-            {
+            if (file_info.fileName() == "."){
              item->setIcon(NAME_COL,style.standardIcon(QStyle::SP_DialogOkButton));
-             //item->setText(DIR_COL, file_info.dir().path());
             }
-            else
-            {
-                file_info.isDir() ?
-                    item->setIcon(NAME_COL,style.standardIcon(QStyle::SP_DirIcon)):
-                    item->setIcon(NAME_COL,style.standardIcon(QStyle::SP_FileIcon));
-
+            else{
+                file_info.isDir() ? item->setIcon(NAME_COL,style.standardIcon(QStyle::SP_DirIcon)) : item->setIcon(NAME_COL,style.standardIcon(QStyle::SP_FileIcon));
                 setItemParameters(item,file_info);
             }
             items.append(item);
     }
     ui->treeWidget->insertTopLevelItems(0,items);
-   //ui->treeWidget->sortItems(SIZE_COL,Qt::SortOrder::DescendingOrder);
 }
 
 
@@ -82,9 +75,8 @@ void main_window::deleteDublicate(){
         return;
     }
     if (QMessageBox::warning(this, tr("Deleting"),
-                       "Do you really want to delete dublicates of \n\n" + selectedFile->text(DIR_COL)+ "/" +selectedFile->text(NAME_COL) ,
-                            QMessageBox::Ok | QMessageBox::Cancel)== QMessageBox::Cancel)
-    {
+                       "Do you really want to delete dublicates of \n\n" + getItemName(selectedFile) ,
+                            QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel){
         return;
     }
 
@@ -129,14 +121,10 @@ void main_window::scan_directory(QString const& dir){
         QCommonStyle style;
         if (comp.size() < 2) continue;
         isDublicate = true;
-        QTreeWidgetItem*  group = new QTreeWidgetItem();
-        group->setText(0,QString::number(comp.size()) + " dublicated files");
-        if(comp.size() * comp.begin()->size() > 1000){
-              group->setIcon(NAME_COL,style.standardIcon(QStyle::SP_MessageBoxCritical));
-        } else {
-              group->setIcon(NAME_COL,style.standardIcon(QStyle::SP_MessageBoxWarning));
-        }
-        group->setTextColor(0,Qt::red);
+        QTreeWidgetItem*  group = new QTreeWidgetItem();  
+        comp.size() * comp.begin()->size() > 1000 ? group->setIcon(NAME_COL,style.standardIcon(QStyle::SP_MessageBoxCritical)) : group->setIcon(NAME_COL,style.standardIcon(QStyle::SP_MessageBoxWarning));
+        group->setText(NAME_COL,QString::number(comp.size()) + " dublicated files");
+        group->setTextColor(NAME_COL,Qt::red);
         group->setText(SIZE_COL,QString::number(comp.size() * comp.begin()->size()));
         for (QFileInfo file_info : comp)
         {
@@ -167,10 +155,10 @@ void main_window::show_about_dialog()
 void main_window::onTreeWidgetClicked(QTreeWidgetItem *item){
     QString prevDir = currentDir;
     prevDir.truncate(prevDir.lastIndexOf("/"));
-    QString x = item->text(DIR_COL) =="" ?  prevDir : getItemName(item);
-    QFileInfo tmp(x);
+    QString newOdj = item->text(DIR_COL) =="" ?  prevDir : getItemName(item);
+    QFileInfo tmp(newOdj);
     if(tmp.isDir()){
-        currentDir= x;
+        currentDir= newOdj;
         makeFileSystem();
     }
 }
@@ -179,11 +167,10 @@ void main_window::onTreeWidgetClicked(QTreeWidgetItem *item){
 
 void main_window::noDublicatesMessage(QString const & dir){
     makeFileSystem();
-    QMessageBox msg(QMessageBox::Information, "Msg",
-                    "No dublicate files found in directiory:\n\n "+ dir +"\n\nDo you want to exit from application?", QMessageBox::Yes | QMessageBox::No);
-       if (msg.exec() == QMessageBox::Yes){
-          this->close();
-       }
+    if ( QMessageBox::information(this, "Msg",
+        "No dublicated files found in directiory:\n\n "+ dir +"\n\nDo you want to exit from application?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes){
+        this->close();
+    }
 }
 
 void main_window:: fileSelected(QTreeWidgetItem* curFile){

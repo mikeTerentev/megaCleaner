@@ -9,16 +9,18 @@
 #include <QTextStream>
 #include <QtGlobal>
 #include <QMessageBox>
-class dataParser
+class DataParser
 {
 public:
-    dataParser(QString const& dir);
+    DataParser(QString const& dir);
     void find_dublicate(QString const& dir);
 //GETTER
     inline QMap<QString, QVector<QFileInfo>> getDublicateMap(){
         return dublicateMap;
     }
 
+    DataParser();
+    void  setDir(const QString &dir);
 private:
     void clear();
     void dfs(QString const& path);

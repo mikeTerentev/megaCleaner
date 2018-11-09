@@ -19,6 +19,7 @@ class main_window : public QMainWindow
     Q_OBJECT
 
 public:
+    enum ACTION{THIS,EXCEPT_THIS};
     const int SIZE_COL = 2;
     const int DIR_COL = 1;
     const int NAME_COL = 0;
@@ -26,22 +27,29 @@ public:
     ~main_window();
 
 
+public slots:
+    void removeFile(QTreeWidgetItem *child);
+    void makeItemUnique();
+    void deleteCurrent();
 private slots:
     void makeFileSystem();
     void select_directory();
     void scan_directory(QString const& dir);
     void show_about_dialog();
-    void onTreeWidgetClicked(QTreeWidgetItem*);
-    void deleteDublicate();
+    void onTreeWidgetClicked(QTreeWidgetItem*); 
     void fileSelected(QTreeWidgetItem*);
 private:
+    bool isCurMain = true;
+     void deleteDublicate(ACTION action);
     QString getItemName(QTreeWidgetItem *item);
     void noDublicatesMessage(QString const& dir);
     void genButtoms(bool isMainWindow);
+    void setItemParameters(QTreeWidgetItem *item, QFileInfo &file_info);
+    QCommonStyle style;
     QString currentDir;
     QTreeWidgetItem* selectedFile = nullptr;
     std::unique_ptr<Ui::MainWindow> ui;
-    void setItemParameters(QTreeWidgetItem *item, QFileInfo &file_info);
+    bool checkItem(ACTION action);
 };
 
 #endif // MAINWINDOW_H

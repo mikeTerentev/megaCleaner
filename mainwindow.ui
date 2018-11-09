@@ -44,7 +44,14 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushDeleteCurrent">
+      <property name="text">
+       <string>Delete current file</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushMakeItemUnique">
       <property name="text">
        <string>Delete all dublicates except current </string>
       </property>

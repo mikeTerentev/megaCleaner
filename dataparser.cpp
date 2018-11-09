@@ -1,22 +1,29 @@
 #include "dataparser.h"
 
-dataParser::dataParser(QString const&  dir):rootPath(dir)
+DataParser::DataParser(QString const&  dir):rootPath(dir)
 {
     //no actions
 }
+DataParser::DataParser(){
+    //no actions
+}
+void DataParser::setDir(QString const&  dir){
+    rootPath=dir;
+}
 
-void dataParser::find_dublicate(QString const& dir)
+void DataParser::find_dublicate(QString const& dir)
 {
+   setDir(dir);
    dfs(dir);
 }
 
-void dataParser::clear()
+void DataParser::clear()
 {
    isVisited.clear();
    dublicateMap.clear();
 }
 
-void dataParser::dfs(QString const& path){
+void DataParser::dfs(QString const& path){
     if (isVisited.contains(path))
     {
       return;
@@ -24,24 +31,18 @@ void dataParser::dfs(QString const& path){
     isVisited.insert(path, true);
     QDir dir(path);
     QFileInfoList list = dir.entryInfoList();
-    for (QFileInfo file_info : list)
-    {
-        if (file_info.fileName() !=".." && file_info.fileName() !=".")
-        {
-            if (file_info.isDir())
-            {
+    for (QFileInfo file_info : list){
+        if (file_info.fileName() !=".." && file_info.fileName() !="."){
+            if (file_info.isDir()){
                 dfs(file_info.absoluteFilePath());
             }
-            else
-            {
+            else{
                QString fileHash = getHash(file_info);
                if (fileHash == "") continue;
-               if (dublicateMap.contains(fileHash))
-               {
+               if (dublicateMap.contains(fileHash)){
                    dublicateMap.find(fileHash).value().append(file_info);
                }
-               else
-               {
+               else{
                    dublicateMap.insert(fileHash,QVector<QFileInfo>({file_info}));
                }
             }
@@ -50,7 +51,7 @@ void dataParser::dfs(QString const& path){
     }
 }
 
-QString dataParser::getHash(QFileInfo & file_info){
+QString DataParser::getHash(QFileInfo & file_info){
 
         QFile file(file_info.absoluteFilePath());
         QCryptographicHash hashAlgo(QCryptographicHash::Sha512);

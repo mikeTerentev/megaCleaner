@@ -26,13 +26,13 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
-    dataparser.cpp
+    dataparser.cpp \
+    mainwindow.cpp
 
 
 HEADERS += \
-        mainwindow.h \
-    dataparser.h
+    dataparser.h \
+    mainwindow.h
 
 
 FORMS += \

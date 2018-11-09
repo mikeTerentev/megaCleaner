@@ -25,6 +25,7 @@ public:
     explicit main_window(QWidget *parent = nullptr);
     ~main_window();
 
+
 private slots:
     void makeFileSystem();
     void select_directory();
@@ -34,11 +35,13 @@ private slots:
     void deleteDublicate();
     void fileSelected(QTreeWidgetItem*);
 private:
+    QString getItemName(QTreeWidgetItem *item);
     void noDublicatesMessage(QString const& dir);
     void genButtoms(bool isMainWindow);
     QString currentDir;
     QTreeWidgetItem* selectedFile = nullptr;
     std::unique_ptr<Ui::MainWindow> ui;
+    void setItemParameters(QTreeWidgetItem *item, QFileInfo &file_info);
 };
 
 #endif // MAINWINDOW_H

@@ -7,6 +7,8 @@
 #include <QDir>
 #include <QCryptographicHash>
 #include <QTextStream>
+#include <QtGlobal>
+#include <QMessageBox>
 class dataParser
 {
 public:
@@ -18,7 +20,6 @@ public:
     }
 
 private:
-
     void clear();
     void dfs(QString const& path);
     QString getHash(QFileInfo &file_info);

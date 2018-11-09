@@ -35,6 +35,7 @@ void dataParser::dfs(QString const& path){
             else
             {
                QString fileHash = getHash(file_info);
+               if (fileHash == "") continue;
                if (dublicateMap.contains(fileHash))
                {
                    dublicateMap.find(fileHash).value().append(file_info);
@@ -50,18 +51,20 @@ void dataParser::dfs(QString const& path){
 }
 
 QString dataParser::getHash(QFileInfo & file_info){
-    QFile file(file_info.absoluteFilePath());
-    QCryptographicHash hashAlgo(QCryptographicHash::Sha512);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        //TIPS: EXCEPTIONS??
-       return "";
-    }
-    QTextStream in(&file);
-    while (!in.atEnd()) {
-        QByteArray byteline;
-        byteline.append(in.readLine());
-        hashAlgo.addData(byteline);
-    }
-    QString hash(hashAlgo.result());
-    return hash;
+
+        QFile file(file_info.absoluteFilePath());
+        QCryptographicHash hashAlgo(QCryptographicHash::Sha512);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+            QMessageBox msg(QMessageBox::Information, "Msg",
+                            "Can't open \n\n" + file_info.absoluteFilePath(), QMessageBox::Ok);
+            return "";
+        }
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QByteArray byteline;
+            byteline.append(in.readLine());
+            hashAlgo.addData(byteline);
+        }
+        QString hash(hashAlgo.result());
+        return hash;
 }

@@ -36,7 +36,6 @@ HEADERS += \
 
 
 FORMS += \
-    dialog.ui \
     mainwindow.ui
 
 # Default rules for deployment.

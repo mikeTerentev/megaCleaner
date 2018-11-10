@@ -43,12 +43,10 @@ void DataParser::dfs(QString const &path) {
                 }
             }
         }
-
     }
 }
 
 QString DataParser::getHash(QFileInfo &file_info) {
-
     QFile file(file_info.absoluteFilePath());
     QCryptographicHash hashAlgo(QCryptographicHash::Sha512);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -59,7 +57,7 @@ QString DataParser::getHash(QFileInfo &file_info) {
     QTextStream in(&file);
     while (!in.atEnd()) {
         QByteArray byteline;
-        byteline.append(in.readLine());
+        byteline.append(in.read(10000));
         hashAlgo.addData(byteline);
     }
     QString hash(hashAlgo.result());

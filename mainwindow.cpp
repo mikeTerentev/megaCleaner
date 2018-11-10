@@ -4,7 +4,7 @@
 #include <QProcess>
 #include <qdesktopservices.h>
 #include <qurl.h>
-
+//TODO: slected file in runetime
 main_window::main_window(QWidget *parent)
         : ui(new Ui::MainWindow), QMainWindow(parent), currentDir(QDir::homePath()) {
     ui->setupUi(this);
@@ -140,7 +140,7 @@ void main_window::select_directory() {
 
 void main_window::scan_directory(QString const &dir) {
     ui->treeWidget->clear();
-    setWindowTitle(QString("Directory Dublicate Content - %1").arg(dir));
+    setWindowTitle(QString("Directory Duplicate Content - %1").arg(dir));
     DataParser s(dir);
     s.find_dublicate(dir);
     bool isDublicate = false;
@@ -153,7 +153,7 @@ void main_window::scan_directory(QString const &dir) {
                                                                    style.standardIcon(QStyle::SP_MessageBoxCritical))
                                                   : group->setIcon(NAME_COL,
                                                                    style.standardIcon(QStyle::SP_MessageBoxWarning));
-        group->setText(NAME_COL, QString("%1 dublicated files").arg(QString::number(comp.size())));
+        group->setText(NAME_COL, QString("%1 duplicated files").arg(QString::number(comp.size())));
         group->setTextColor(NAME_COL, Qt::red);
         group->setText(SIZE_COL, QString::number(comp.size() * comp.begin()->size()));
 
@@ -193,7 +193,7 @@ void main_window::onTreeWidgetClicked(QTreeWidgetItem *item) {
 void main_window::noDublicatesMessage(QString const &dir) {
     makeFileSystem();
     if (QMessageBox::information(this, "Msg",
-                                 QString("No dublicated files found in directiory:\n\n %1 \n\nDo you want to exit from application?").arg(
+                                 QString("No duplicated files found in directiory:\n\n %1 \n\nDo you want to exit from application?").arg(
                                          dir), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
         this->close();
     }

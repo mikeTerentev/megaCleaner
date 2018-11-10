@@ -9,6 +9,7 @@
 #include <QTextStream>
 #include <QtGlobal>
 #include <QMessageBox>
+#include <QDirIterator>
 
 class DataParser {
 public:
@@ -28,13 +29,12 @@ public:
 private:
     void clear();
 
-    void dfs(QString const &path);
-
-    QString getHash(QFileInfo &file_info);
+    QString getHash(QString &file_info);
 
 private:
     QMap<QString, bool> isVisited;
     QMap <QString, QVector<QFileInfo>> dublicateMap;
+    QMap <qint64, QVector<QString>> dublicateSizeMap;
     QString rootPath;
 
 };

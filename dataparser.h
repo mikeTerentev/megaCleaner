@@ -32,7 +32,6 @@ private:
     QString getHash(QString &file_info);
 
 private:
-    QMap<QString, bool> isVisited;
     QMap <QString, QVector<QFileInfo>> dublicateMap;
     QMap <qint64, QVector<QString>> dublicateSizeMap;
     QString rootPath;

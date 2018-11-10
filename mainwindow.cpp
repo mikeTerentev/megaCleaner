@@ -23,20 +23,26 @@ main_window::main_window(QWidget *parent)
     connect(ui->actionAbout, &QAction::triggered, this, &main_window::show_about_dialog);
 
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem * , int)), this,
-            SLOT(onTreeWidgetClicked(QTreeWidgetItem * )));
+            SLOT(onTreeWidgetClicked()));
     connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem * , int)), this, SLOT(fileSelected(QTreeWidgetItem * )));
-
+     connect(ui->treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *,QTreeWidgetItem *)),this,SLOT(fileSelected(QTreeWidgetItem *)));
     connect(ui->pushScanDir, SIGNAL(clicked()), this, SLOT(select_directory()));
     connect(ui->pushGoBack, SIGNAL(clicked()), this, SLOT(makeFileSystem()));
     connect(ui->pushMakeItemUnique, SIGNAL(clicked()), this, SLOT(makeItemUnique()));
     connect(ui->pushDeleteCurrent, SIGNAL(clicked()), this, SLOT(deleteCurrent()));
-
+   // connect(ui->treeWidget, SIGNAL(keyPressEvent(QKeyEvent *)),this,SLOT(keyClicked(QKeyEvent *)));
     makeFileSystem();
 }
+/*void QWidget::keyPressEvent (QKeyEvent * event){
+    if( event->key()==Qt::Key_Enter){
+        this->onTreeWidgetClicked();
+    }
+}*/
 
 main_window::~main_window() {}
 
 void main_window::makeFileSystem() {
+
     QCommonStyle style;
     ui->treeWidget->clear();
     genButtoms(true);
@@ -61,6 +67,7 @@ void main_window::makeFileSystem() {
 }
 
 void main_window::makeItemUnique() {
+    selectedFile =ui->treeWidget->currentItem();
     deleteDublicate(ACTION::EXCEPT_THIS);
 }
 
@@ -84,7 +91,7 @@ void main_window::deleteDublicate(ACTION action) {
             parent->setText(NAME_COL, QString("%1  dublicated files").arg(parent->childCount()));
             parent->setText(SIZE_COL,QString::number(parent->childCount()*delSize));
         }
-        selectedFile = nullptr;
+
         QMessageBox::information(this, tr("Congratulations"),
                                  QString("file was successfuly deleted\n"), QMessageBox::Ok);
     }
@@ -144,7 +151,7 @@ void main_window::scan_directory(QString const &dir) {
     DataParser s(dir);
     s.find_dublicate(dir);
     bool isDublicate = false;
-    for (QVector <QFileInfo> comp : s.getDublicateMap()) {
+    for (QVector <QFileInfo>& comp : s.getDublicateMap()) {
         if (comp.size() < 2) continue;
         isDublicate = true;
         QTreeWidgetItem * group = new QTreeWidgetItem();
@@ -177,18 +184,17 @@ void main_window::show_about_dialog() {
     QMessageBox::aboutQt(this);
 }
 
-void main_window::onTreeWidgetClicked(QTreeWidgetItem *item) {
+void main_window::onTreeWidgetClicked() {
     if (!isCurMain) return;
     QString prevDir = currentDir;
     prevDir.truncate(prevDir.lastIndexOf("/"));
-    QString newOdj = item->text(DIR_COL) == "" ? prevDir : getItemName(item);
+    QString newOdj = selectedFile->text(DIR_COL) == "" ? prevDir : getItemName(selectedFile);
     QFileInfo tmp(newOdj);
     if (tmp.isDir()) {
         currentDir = newOdj;
         makeFileSystem();
     }
 }
-
 
 void main_window::noDublicatesMessage(QString const &dir) {
     makeFileSystem();

@@ -12,11 +12,12 @@
 #include <memory>
 #include <dataparser.h>
 #include <thread>
+#include <QKeyEvent>
 namespace Ui {
     class MainWindow;
 }
 
-class main_window : public QMainWindow {
+class main_window : public QMainWindow  {
     Q_OBJECT
 
 public:
@@ -32,8 +33,10 @@ public:
     ~main_window();
 
 
-public
+
+    public
     slots:
+   // void keyPressEvent(QKeyEvent *event);
             void
     removeFile(QTreeWidgetItem
     *child);
@@ -54,7 +57,7 @@ private
 
     void show_about_dialog();
 
-    void onTreeWidgetClicked(QTreeWidgetItem *);
+    void onTreeWidgetClicked();
 
     void fileSelected(QTreeWidgetItem *);
 

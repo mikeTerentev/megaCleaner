@@ -17,30 +17,22 @@ void DataParser::find_dublicate(QString const &dir) {
     QDirIterator it(dir, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         QFileInfo  file(it.next());
-        if (file.fileName() == ".." && file.fileName() == ".")
+        QString x(file.fileName());
+        if ( x == ".." && x == ".")
             continue;
-        if (dublicateSizeMap.contains(file.size())) {
-            dublicateSizeMap.find(file.size()).value().append(file.absoluteFilePath());
-        } else {
-            dublicateSizeMap.insert(file.size(), QVector<QString>({file.absoluteFilePath()}));
-        }
+            dublicateSizeMap[file.size()].push_back(file.absoluteFilePath());
     }
-    for (auto currGroup : dublicateSizeMap){
-        for (auto fileDir : currGroup){
+    for (auto& currGroup : dublicateSizeMap){
+        for (auto& fileDir : currGroup){
             QFileInfo file_info(fileDir);
             QString fileHash = getHash(fileDir);
             if (fileHash == "") continue;
-            if (dublicateMap.contains(fileHash)) {
-                dublicateMap.find(fileHash).value().append(file_info);
-            } else {
-                dublicateMap.insert(fileHash, QVector<QFileInfo>({file_info}));
-            }
+            dublicateMap[fileHash].push_back(file_info);
         }
     }
 }
 
 void DataParser::clear() {
-    isVisited.clear();
     dublicateMap.clear();
 }
 
@@ -52,10 +44,9 @@ QString DataParser::getHash(QString &filedir) {
     if (!file_info.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox msg(QMessageBox::Information, "Msg",
                         "Can't open \n\n" + filedir, QMessageBox::Ok);
-        return "";
+        return QString("");
     }
      QCryptographicHash hash(QCryptographicHash::Algorithm::Md5);
      hash.addData(&file_info);
-     return QString(hash.result());
-
+     return hash.result();
 }

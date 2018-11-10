@@ -9,27 +9,32 @@
 #include <QTextStream>
 #include <QtGlobal>
 #include <QMessageBox>
-class DataParser
-{
+
+class DataParser {
 public:
-    DataParser(QString const& dir);
-    void find_dublicate(QString const& dir);
+    DataParser(QString const &dir);
+
+    void find_dublicate(QString const &dir);
+
 //GETTER
-    inline QMap<QString, QVector<QFileInfo>> getDublicateMap(){
+    inline QMap <QString, QVector<QFileInfo>> getDublicateMap() {
         return dublicateMap;
     }
 
     DataParser();
-    void  setDir(const QString &dir);
+
+    void setDir(const QString &dir);
+
 private:
     void clear();
-    void dfs(QString const& path);
+
+    void dfs(QString const &path);
+
     QString getHash(QFileInfo &file_info);
 
 private:
-
     QMap<QString, bool> isVisited;
-    QMap<QString, QVector<QFileInfo>> dublicateMap ;
+    QMap <QString, QVector<QFileInfo>> dublicateMap;
     QString rootPath;
 
 };

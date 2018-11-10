@@ -86,7 +86,6 @@
     <property name="title">
      <string>Fi&amp;le</string>
     </property>
-    <addaction name="actionScan_Directory"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>

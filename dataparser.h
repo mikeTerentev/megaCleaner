@@ -1,15 +1,13 @@
 #ifndef DATA_SECTION_H
 #define DATA_SECTION_H
 
-#include <QWidget>
-#include <QMap>
-#include <QFileInfo>
-#include <QDir>
-#include <QCryptographicHash>
-#include <QTextStream>
-#include <QtGlobal>
-#include <QMessageBox>
-#include <QDirIterator>
+#include <qfileinfo.h>
+#include <qstring.h>
+#include <qmap.h>
+#include <qcryptographichash.h>
+#include <qdiriterator.h>
+#include <qmessagebox.h>
+
 
 class DataParser {
 public:

@@ -1,5 +1,7 @@
 #include "dataparser.h"
 
+
+
 DataParser::DataParser(QString const &dir) : rootPath(dir) {
     //no actions
 }

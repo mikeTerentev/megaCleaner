@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QTreeWidget" name="treeWidget">
+     <widget class="MyTreeWidget" name="treeWidget">
       <property name="animated">
        <bool>true</bool>
       </property>
@@ -115,6 +115,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MyTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>mytreewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

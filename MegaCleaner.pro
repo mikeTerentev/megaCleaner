@@ -27,12 +27,15 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
     dataparser.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mytreewidget.cpp
 
 
 HEADERS += \
     dataparser.h \
-    mainwindow.h
+    mainwindow.h \
+    mytreewidget.h \
+    action.h
 
 
 FORMS += \

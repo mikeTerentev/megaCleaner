@@ -6,7 +6,7 @@
 main_window::main_window(QWidget *parent)
         : ui(new Ui::MainWindow), QMainWindow(parent) {
     ui->setupUi(this);
-
+   ui->treeWidget->setMainWindow(this);
     ui->treeWidget->header()->setSectionResizeMode(ui->treeWidget->NAME_COL, QHeaderView::Stretch);
     ui->treeWidget->header()->setSectionResizeMode(ui->treeWidget->DIR_COL, QHeaderView::ResizeToContents);
     ui->treeWidget->header()->setSectionResizeMode(ui->treeWidget->SIZE_COL, QHeaderView::ResizeToContents);
@@ -16,7 +16,7 @@ main_window::main_window(QWidget *parent)
     ui->actionExit->setIcon(style.standardIcon(QCommonStyle::SP_DialogCloseButton));
     ui->actionAbout->setIcon(style.standardIcon(QCommonStyle::SP_DialogHelpButton));
 
-    connect(ui->actionScan_Directory, &QAction::triggered, this, &main_window::select_directory);
+    connect(ui->actionScan_Directory, &QAction::triggered, this, &main_window::scan_directory);
     connect(ui->actionExit, &QAction::triggered, this, &QWidget::close);
     connect(ui->actionAbout, &QAction::triggered, this, &main_window::show_about_dialog);
 
@@ -27,7 +27,7 @@ main_window::main_window(QWidget *parent)
             SLOT(fileSelected(QTreeWidgetItem * )));
 
 
-    connect(ui->pushScanDir, SIGNAL(clicked()), this, SLOT(select_directory()));
+    connect(ui->pushScanDir, SIGNAL(clicked()), this, SLOT(scan_directory()));
     connect(ui->pushGoBack, SIGNAL(clicked()), this, SLOT(makeFileSystem()));
     connect(ui->pushMakeItemUnique, SIGNAL(clicked()), this, SLOT(makeItemUnique()));
     connect(ui->pushDeleteCurrent, SIGNAL(clicked()), this, SLOT(deleteCurrent()));
@@ -47,13 +47,14 @@ void main_window::deleteCurrent() {
 }
 
 void main_window::makeFileSystem() {
+    ui->treeWidget->setModeType(true);
     genButtoms(true);
     ui->treeWidget->makeFileSystem();
 }
 
-void main_window::select_directory() {
+void main_window::scan_directory() {
     ui->treeWidget->scan_directory(ui->treeWidget->getCurrDir());
-    genButtoms(false);
+    genButtoms(ui->treeWidget->getModeType());
 }
 
 

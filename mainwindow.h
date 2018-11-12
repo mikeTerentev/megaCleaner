@@ -30,19 +30,17 @@ public
 
     void makeItemUnique();
 
+    void scan_directory();
+
+    void  makeFileSystem();
     private
     slots:
-    void  makeFileSystem();
-
-    void select_directory();
-
 
     void show_about_dialog();   
 
 
 private:
     bool isCurMain = true;
-
 
     void genButtoms(bool isMainWindow);
 

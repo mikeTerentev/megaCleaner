@@ -16,7 +16,7 @@ public:
     void find_dublicate(QString const &dir);
 
 //GETTER
-    inline QMap <QString, QVector<QFileInfo>> getDublicateMap() {
+    inline QMap <QString, QVector<QString>> getDublicateMap() {
         return dublicateMap;
     }
 
@@ -30,7 +30,7 @@ private:
     QString getHash(QString &file_info);
 
 private:
-    QMap <QString, QVector<QFileInfo>> dublicateMap;
+    QMap <QString, QVector<QString>> dublicateMap;
     QMap <qint64, QVector<QString>> dublicateSizeMap;
     QString rootPath;
 

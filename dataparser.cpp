@@ -26,10 +26,9 @@ void DataParser::find_dublicate(QString const &dir) {
     }
     for (auto& currGroup : dublicateSizeMap){
         for (auto& fileDir : currGroup){
-            QFileInfo file_info(fileDir);
             QString fileHash = getHash(fileDir);
             if (fileHash == "") continue;
-            dublicateMap[fileHash].push_back(file_info);
+            dublicateMap[fileHash].push_back(fileDir);
         }
     }
 }

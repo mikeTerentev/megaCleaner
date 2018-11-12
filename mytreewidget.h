@@ -7,8 +7,9 @@
 #include <qtreewidget.h>
 #include "dataparser.h"
 #include "QKeyEvent"
+#include "mainwindow.h"
 #include <qdesktopservices.h>
-
+#include <qdebug.h>
 class MyTreeWidget : public QTreeWidget {
     Q_OBJECT
 public:
@@ -19,7 +20,9 @@ public:
     virtual ~MyTreeWidget(){}
 
    explicit MyTreeWidget(QWidget *parent = nullptr):QTreeWidget (parent) {}
-
+    void setMainWindow(main_window* mw){
+         mainwindow = mw;
+    }
     void makeFileSystem();
 
     void removeFile(QTreeWidgetItem *child);
@@ -43,6 +46,10 @@ public:
         isCurMain = b;
     }
 
+    bool getModeType(){
+        return isCurMain;
+    }
+
     void setSelectedFile(QTreeWidgetItem *x) {
         selectedFile = x;
     }
@@ -54,8 +61,10 @@ public:
             void deleteDublicate(ACTION action);
 
             void fileSelected(QTreeWidgetItem *curFile);
+
             void keyPressEvent(QKeyEvent *event);
 private:
+    main_window* mainwindow;
     QCommonStyle style;
     QString currentDir = QDir::homePath();
     QTreeWidgetItem *selectedFile = nullptr;

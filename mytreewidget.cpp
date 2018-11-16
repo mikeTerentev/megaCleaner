@@ -2,7 +2,8 @@
 
 void MyTreeWidget::makeFileSystem() {
     clear();
-    setWindowTitle(QString("Directory Content - %1").arg(currentDir));
+    setSortingEnabled(0);
+    mainwindow->setWindowTitle(QString("Directory Content - %1").arg(currentDir));
     QDir d(currentDir);
     QFileInfoList list = d.entryInfoList();
     QList < QTreeWidgetItem * > items;
@@ -15,8 +16,8 @@ void MyTreeWidget::makeFileSystem() {
         } else {
             file_info.isDir() ? item->setIcon(NAME_COL, style.standardIcon(QStyle::SP_DirIcon)) : item->setIcon(
                     NAME_COL, style.standardIcon(QStyle::SP_FileIcon));
-            setItemParameters(item, file_info);
         }
+        setItemParameters(item, file_info);
         items.append(item);
     }
     insertTopLevelItems(0, items);
@@ -93,9 +94,10 @@ void MyTreeWidget::removeFile(QTreeWidgetItem *child) {
 }
 
 void MyTreeWidget::scan_directory(QString const &dir) {
+    setSortingEnabled(true);
     isCurMain = false;
     clear();
-    setWindowTitle(QString("Directory Duplicate Content - %1").arg(dir));
+    mainwindow->setWindowTitle(QString("Directory Duplicate Content - %1").arg(dir));
     DataParser s(dir);
     s.find_dublicate(dir);
     bool isDublicate = false;
@@ -108,16 +110,16 @@ void MyTreeWidget::scan_directory(QString const &dir) {
                                                                    style.standardIcon(QStyle::SP_MessageBoxCritical))
                                                   : group->setIcon(NAME_COL,
                                                                    style.standardIcon(QStyle::SP_MessageBoxWarning));
-        group->setText(NAME_COL, QString("%1 duplicated files").arg(QString::number(comp.size())));
+        group->setText(NAME_COL, QString("%1 duplicated files").arg(comp.size()));
         group->setTextColor(NAME_COL, Qt::red);
-        group->setText(SIZE_COL, QString::number(comp.size() * comp.begin()->size()));
-
+        qDebug()<<comp.size();
         for (auto& fileDir : comp) {
            QFileInfo file_info(fileDir);
             QTreeWidgetItem *item = new QTreeWidgetItem();
             setItemParameters(item, file_info);
             group->addChild(item);
         }
+       group->setText(SIZE_COL, QString::number(comp.size() * group->child(0)->text(SIZE_COL).toLong()));
         addTopLevelItem(group);
     }
     sortItems(SIZE_COL, Qt::SortOrder::DescendingOrder);
@@ -133,7 +135,13 @@ void MyTreeWidget::onTreeWidgetClicked() {
     if (selectedFile == nullptr) return;
     QString prevDir = currentDir;
     prevDir.truncate(prevDir.lastIndexOf("/"));
-    QString newOdj = selectedFile->text(DIR_COL) == "" ? prevDir : getItemName(selectedFile);
+    if(prevDir == ""){
+        prevDir = "/";
+    }
+    QString newOdj = selectedFile->text(NAME_COL) == "." ? prevDir : getItemName(selectedFile);
+    if(newOdj.startsWith("//")){
+        newOdj = newOdj.mid(1);
+    }
     QFileInfo tmp(newOdj);
     if (isCurMain && tmp.isDir()) {
             currentDir = newOdj;
@@ -148,7 +156,7 @@ void MyTreeWidget::onTreeWidgetClicked() {
 void MyTreeWidget::noDublicatesMessage(QString const &dir) {
       makeFileSystem();
     if (QMessageBox::information(this, "Msg",
-                                 QString("No duplicated files found in directiory:\n\n %1 \n\nDo you want to exit from application?").arg(
+                                 QString("No duplicated files found in directory:\n\n %1 \n\nDo you want to exit from application?").arg(
                                          dir), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
         this->close();
     }
@@ -166,7 +174,8 @@ void MyTreeWidget::keyPressEvent(QKeyEvent * event){
     if ( event->key() == Qt::Key_Return){
         this->onTreeWidgetClicked();
     }
-    if ( event->key() == Qt::Key_F){
+    //f
+    if ( event->key() == Qt::Key(1040)||  event->key() ==Qt::Key_F){
         mainwindow->scan_directory();
     }
     if ( event->key() == Qt::Key_Escape && !isCurMain){
@@ -179,7 +188,9 @@ void MyTreeWidget::keyPressEvent(QKeyEvent * event){
     QTreeWidget::keyPressEvent(event);
 }
 void MyTreeWidget::setItemParameters(QTreeWidgetItem *item, QFileInfo &file_info) {
-    item->setText(NAME_COL, file_info.fileName());
     item->setText(DIR_COL, file_info.path());
-    item->setText(SIZE_COL, QString::number(file_info.size()));
+    item->setText(NAME_COL, file_info.fileName());
+    if (!file_info.isDir()){
+      item->setText(SIZE_COL, QString::number(file_info.size()));
+    }
 }

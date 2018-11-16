@@ -19,7 +19,9 @@ public:
 
     virtual ~MyTreeWidget(){}
 
-   explicit MyTreeWidget(QWidget *parent = nullptr):QTreeWidget (parent) {}
+   explicit MyTreeWidget(QWidget *parent = nullptr):QTreeWidget (parent) {
+
+    }
     void setMainWindow(main_window* mw){
          mainwindow = mw;
     }

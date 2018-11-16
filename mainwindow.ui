@@ -67,7 +67,7 @@
     <item>
      <widget class="QPushButton" name="pushScanDir">
       <property name="text">
-       <string>ScanDirecotory</string>
+       <string>ScanDirectory</string>
       </property>
      </widget>
     </item>

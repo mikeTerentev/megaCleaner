@@ -23,7 +23,7 @@ void DataParser::find_dublicate(QString const &dir) {
     while (it.hasNext()) {
         QFileInfo  file(it.next());
         QString x(file.fileName());
-        if ( x == ".." && x == ".")
+        if ( x == ".." || x == ".")
             continue;
         if (dublicateSizeMap.contains(file.size())){
             numTasks++;
@@ -33,8 +33,7 @@ void DataParser::find_dublicate(QString const &dir) {
     }
     for (auto& currGroup : dublicateSizeMap){
         for (auto& fileDir : currGroup){
-            QString fileHash = getHash(fileDir);
-            if (fileHash == "") continue;
+            QByteArray fileHash = getHash(fileDir);
             dublicateMap[fileHash].push_back(fileDir);
         }
     }
@@ -46,13 +45,13 @@ void DataParser::clear() {
 
 
 //strace fdupes
-QString DataParser::getHash(QString &filedir) {
+QByteArray DataParser::getHash(QString &filedir) {
     QFile file_info(filedir);
-    QCryptographicHash hashAlgo(QCryptographicHash::Md5);
+    QCryptographicHash hashAlgo(QCryptographicHash::Sha256);
     if (!file_info.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox msg(QMessageBox::Information, "Msg",
                         "Can't open \n\n" + filedir, QMessageBox::Ok);
-        return QString("");
+        return nullptr;
     }
      QCryptographicHash hash(QCryptographicHash::Algorithm::Md5);
      hash.addData(&file_info);

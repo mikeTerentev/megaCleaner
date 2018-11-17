@@ -19,7 +19,7 @@ public:
     }
 
 //GETTER
-    inline QMap <QString, QVector<QString>> getDublicateMap() {
+    inline QMap <QByteArray, QVector<QString>> getDublicateMap() {
         return dublicateMap;
     }
 
@@ -29,11 +29,11 @@ public:
 
 private:
     void clear();
-    QString getHash(QString &file_info);
+    QByteArray getHash(QString &file_info);
 
 private:
     main_window* mainwindow;
-    QMap <QString, QVector<QString>> dublicateMap;
+    QMap <QByteArray, QVector<QString>> dublicateMap;
     QMap <qint64, QVector<QString>> dublicateSizeMap;
     QString rootPath;
     public

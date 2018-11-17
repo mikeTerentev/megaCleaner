@@ -38,7 +38,7 @@ private:
     QString rootPath;
     public
          slots:
-    void find_dublicate();
+    void find_dublicate(QString const &dir);
 };
 
 #endif // DATA_SECTION_H

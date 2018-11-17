@@ -29,7 +29,6 @@ public:
 
 private:
     void clear();
-
     QString getHash(QString &file_info);
 
 private:
@@ -39,7 +38,7 @@ private:
     QString rootPath;
     public
          slots:
-    void find_dublicate(QString const &dir);
+    void find_dublicate();
 };
 
 #endif // DATA_SECTION_H

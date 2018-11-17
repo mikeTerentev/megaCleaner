@@ -100,10 +100,10 @@ void MyTreeWidget::scan_directory(QString const &dir) {
     isCurMain = false;
     clear();
     mainwindow->setWindowTitle(QString("Directory Duplicate Content - %1").arg(dir));
-    DataParser* s = new DataParser(dir,mainwindow);
-    s->find_dublicate(dir);
+    DataParser s(dir,mainwindow);
+    s.find_dublicate();
     bool isDublicate = false;
-    for (auto& comp : s->getDublicateMap()) {
+    for (auto& comp : s.getDublicateMap()) {
         if (comp.size() < 2) continue;
         isDublicate = true;
         QTreeWidgetItem *group = new QTreeWidgetItem();

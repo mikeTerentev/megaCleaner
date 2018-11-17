@@ -14,11 +14,11 @@ void DataParser::setDir(QString const &dir) {
     rootPath = dir;
 }
 
-void DataParser::find_dublicate(QString const &dir) {
-    setDir(dir);
+void DataParser::find_dublicate() {
+    setDir(rootPath);
     int numTasks = 0;
     int numFiles = 0;
-    QDirIterator it(dir, QDirIterator::Subdirectories);
+    QDirIterator it(rootPath, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         QFileInfo  file(it.next());
         QString x(file.fileName());

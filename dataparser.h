@@ -11,13 +11,12 @@
 #include <qmessagebox.h>
 #include <mainwindow.h>
 #include <qdebug.h>
-class DataParser {
+class DataParser:public QObject {
+    Q_OBJECT
 public:
     DataParser(QString const &dir,main_window* mainwindow) : mainwindow(mainwindow),rootPath(dir) {
         //no actions
     }
-
-    void find_dublicate(QString const &dir);
 
 //GETTER
     inline QMap <QString, QVector<QString>> getDublicateMap() {
@@ -38,7 +37,9 @@ private:
     QMap <QString, QVector<QString>> dublicateMap;
     QMap <qint64, QVector<QString>> dublicateSizeMap;
     QString rootPath;
-
+    public
+         slots:
+    void find_dublicate(QString const &dir);
 };
 
 #endif // DATA_SECTION_H

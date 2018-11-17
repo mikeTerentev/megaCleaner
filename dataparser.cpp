@@ -19,12 +19,10 @@ void DataParser::find_dublicate(QString const &dir) {
     setDir(rootPath);
     int numTasks = 0;
     int numFiles = 0;
-    QDirIterator it(rootPath, QDirIterator::Subdirectories);
+   QDirIterator it(rootPath,QDir::Hidden | QDir::Files | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         QFileInfo  file(it.next());
         QString x(file.fileName());
-        if ( x == ".." || x == ".")
-            continue;
         if (dublicateSizeMap.contains(file.size())){
             numTasks++;
         }

@@ -17,22 +17,20 @@ void DataParser::setDir(QString const &dir) {
 void DataParser::find_dublicate(QString const &dir) {
      setDir(dir);
     setDir(rootPath);
-    int numTasks = 0;
     int numFiles = 0;
    QDirIterator it(rootPath,QDir::Hidden | QDir::Files | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         QFileInfo  file(it.next());
         QString x(file.fileName());
-        if (dublicateSizeMap.contains(file.size())){
-            numTasks++;
-        }
            dublicateSizeMap[file.size()].push_back(file.absoluteFilePath());
            numFiles++;
     }
     for (auto& currGroup : dublicateSizeMap){
+        if(currGroup.count() < 2) continue;
         for (auto& fileDir : currGroup){
-            QByteArray fileHash = getHash(fileDir);
-            dublicateMap[fileHash].push_back(fileDir);
+                QByteArray fileHash = getHash(fileDir);
+                dublicateMap[fileHash].push_back(fileDir);
+
         }
     }
 }

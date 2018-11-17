@@ -10,6 +10,8 @@
 #include "mainwindow.h"
 #include <qdesktopservices.h>
 #include <qdebug.h>
+#include <qapplication.h>
+#include "QClipboard"
 class MyTreeWidget : public QTreeWidget {
     Q_OBJECT
 public:
@@ -20,7 +22,7 @@ public:
     virtual ~MyTreeWidget(){}
 
    explicit MyTreeWidget(QWidget *parent = nullptr):QTreeWidget (parent) {
-
+        setUniformRowHeights(1);
     }
     void setMainWindow(main_window* mw){
          mainwindow = mw;
@@ -30,6 +32,7 @@ public:
     void removeFile(QTreeWidgetItem *child);
 
     void scan_directory(const QString &dir);
+
     QString getItemName(QTreeWidgetItem *item);
 
     QString getCurrDir() {
@@ -71,7 +74,7 @@ private:
     QString currentDir = QDir::homePath();
     QTreeWidgetItem *selectedFile = nullptr;
     bool isCurMain = true;
-
+    bool isButtomsWorks =true;
     bool checkItem(ACTION action);
 
     void noDublicatesMessage(const QString &dir);

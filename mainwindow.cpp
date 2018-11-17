@@ -7,8 +7,8 @@ main_window::main_window(QWidget *parent)
         : ui(new Ui::MainWindow), QMainWindow(parent) {
     ui->setupUi(this);
    ui->treeWidget->setMainWindow(this);
-    ui->treeWidget->header()->setSectionResizeMode(ui->treeWidget->NAME_COL, QHeaderView::Stretch);
-    ui->treeWidget->header()->setSectionResizeMode(ui->treeWidget->DIR_COL, QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(ui->treeWidget->NAME_COL,  QHeaderView::Stretch);
+    ui->treeWidget->header()->setSectionResizeMode(ui->treeWidget->DIR_COL, QHeaderView::Stretch);
     ui->treeWidget->header()->setSectionResizeMode(ui->treeWidget->SIZE_COL, QHeaderView::ResizeToContents);
     ui->treeWidget->header()->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
 

@@ -1,5 +1,7 @@
 #include "mytreewidget.h"
 
+
+
 void MyTreeWidget::makeFileSystem() {
     clear();
     setSortingEnabled(0);
@@ -98,10 +100,10 @@ void MyTreeWidget::scan_directory(QString const &dir) {
     isCurMain = false;
     clear();
     mainwindow->setWindowTitle(QString("Directory Duplicate Content - %1").arg(dir));
-    DataParser s(dir);
-    s.find_dublicate(dir);
+    DataParser* s = new DataParser(dir,mainwindow);
+    s->find_dublicate(dir);
     bool isDublicate = false;
-    for (auto& comp : s.getDublicateMap()) {
+    for (auto& comp : s->getDublicateMap()) {
         if (comp.size() < 2) continue;
         isDublicate = true;
         QTreeWidgetItem *group = new QTreeWidgetItem();
@@ -129,6 +131,7 @@ void MyTreeWidget::scan_directory(QString const &dir) {
         noDublicatesMessage(dir);
         isCurMain = true;
     }
+    isButtomsWorks = true;
 }
 
 void MyTreeWidget::onTreeWidgetClicked() {

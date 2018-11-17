@@ -3,7 +3,6 @@
 
 
 #include <memory>
-#include <dataparser.h>
 #include <qmainwindow.h>
 #include <qcommonstyle.h>
 

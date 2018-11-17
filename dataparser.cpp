@@ -22,6 +22,7 @@ void DataParser::find_dublicate(QString const &dir) {
     while (it.hasNext()) {
         QFileInfo  file(it.next());
         QString x(file.fileName());
+        if (file.isSymLink()) continue;
            dublicateSizeMap[file.size()].push_back(file.absoluteFilePath());
            numFiles++;
     }

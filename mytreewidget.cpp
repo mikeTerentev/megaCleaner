@@ -1,11 +1,15 @@
+
 #include "mytreewidget.h"
+#include "progressdialog.h"
+
+#include <QThread>
+#include <qprogressbar.h>
 
 
 
 void MyTreeWidget::makeFileSystem() {
     clear();
-    setSortingEnabled(0);
-    mainwindow->setWindowTitle(QString("Directory Content - %1").arg(currentDir));
+    //mainwindow->setWindowTitle(QString("Directory Content - %1").arg(currentDir));
     QDir d(currentDir);
     QFileInfoList list = d.entryInfoList();
     QList < QTreeWidgetItem * > items;
@@ -96,14 +100,34 @@ void MyTreeWidget::removeFile(QTreeWidgetItem *child) {
 }
 
 void MyTreeWidget::scan_directory(QString const &dir) {
-    setSortingEnabled(true);
     isCurMain = false;
+    auto *thread = new QThread();
+    worker = new DataParser(dir);
+    auto *progressWindow = new ProgressDialog(thread, this);
+    worker->moveToThread(thread);
+
+    connect(thread, SIGNAL (started()), worker, SLOT (find_dublicate()));
+
+    connect(worker, SIGNAL(filesChecked(int)), progressWindow, SLOT(update(int)));
+    connect(worker, SIGNAL(filesCounted(int)), progressWindow, SLOT(setRange(int)));
+
+
+    connect(worker, SIGNAL (finished(int)), this, SLOT (show()));
+    connect(worker, SIGNAL (finished(int)), thread, SLOT (quit()));
+    connect(worker, SIGNAL(finished(int)),  progressWindow, SLOT(done(int)));
+    connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+
+    thread->start();
+    if (progressWindow->exec() == QDialog::Rejected) {
+            progressWindow->stopSearch();
+        }
+    delete progressWindow;
+}
+void MyTreeWidget::show(){
+    qDebug()<<"kek";
     clear();
-    mainwindow->setWindowTitle(QString("Directory Duplicate Content - %1").arg(dir));
-    DataParser s(dir,mainwindow);
-    s.find_dublicate(dir);
     bool isDublicate = false;
-    for (auto& comp : s.getDublicateMap()) {
+    for (auto& comp : worker->getDublicateMap()) {
         if (comp.size() < 2) continue;
         isDublicate = true;
         QTreeWidgetItem *group = new QTreeWidgetItem();
@@ -128,10 +152,11 @@ void MyTreeWidget::scan_directory(QString const &dir) {
 
     selectedFile = nullptr;
     if (!isDublicate) {
-        noDublicatesMessage(dir);
+        noDublicatesMessage(worker->rootPath);
         isCurMain = true;
     }
     isButtomsWorks = true;
+    delete worker;
 }
 
 void MyTreeWidget::onTreeWidgetClicked() {
@@ -182,6 +207,13 @@ void MyTreeWidget::keyPressEvent(QKeyEvent * event){
         mainwindow->scan_directory();
     }
     if ( event->key() == Qt::Key_Escape && !isCurMain){
+        mainwindow->makeFileSystem();
+    }
+    if ( event->key() == Qt::Key_Escape && isCurMain){
+        currentDir.truncate(currentDir.lastIndexOf("/"));
+        if(currentDir.size()==0){
+            currentDir = "/";
+        };
         mainwindow->makeFileSystem();
     }
     qDebug() << Qt::Key(event->key());

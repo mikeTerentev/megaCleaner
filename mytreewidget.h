@@ -19,7 +19,8 @@ public:
     const int DIR_COL = 1;
     const int NAME_COL = 0;
 
-    virtual ~MyTreeWidget(){}
+    virtual ~MyTreeWidget(){
+    }
 
    explicit MyTreeWidget(QWidget *parent = nullptr):QTreeWidget (parent) {
         setUniformRowHeights(1);
@@ -59,23 +60,27 @@ public:
         selectedFile = x;
     }
 
- public
-    slots:
-            void onTreeWidgetClicked();
+ public slots:
+    void onTreeWidgetClicked();
 
-            void deleteDublicate(ACTION action);
+    void deleteDublicate(ACTION action);
 
-            void fileSelected(QTreeWidgetItem *curFile);
+    void fileSelected(QTreeWidgetItem *curFile);
 
-            void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+
+     void show();
 private:
-    main_window* mainwindow;
-    QCommonStyle style;
-    QString currentDir = QDir::homePath();
-    QTreeWidgetItem *selectedFile = nullptr;
     bool isCurMain = true;
     bool isButtomsWorks =true;
     bool checkItem(ACTION action);
+    main_window* mainwindow;
+    QThread* thread = nullptr;
+    DataParser* worker = nullptr;
+    QCommonStyle style;
+    QString currentDir = QDir::homePath();
+    QTreeWidgetItem *selectedFile = nullptr;
+
 
     void noDublicatesMessage(const QString &dir);
 

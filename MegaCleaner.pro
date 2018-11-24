@@ -28,18 +28,21 @@ SOURCES += \
         main.cpp \
     dataparser.cpp \
     mainwindow.cpp \
-    mytreewidget.cpp
+    mytreewidget.cpp \
+    progressdialog.cpp
 
 
 HEADERS += \
     dataparser.h \
     mainwindow.h \
     mytreewidget.h \
-    action.h
+    action.h \
+    progressdialog.h
 
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    progressdialog.ui
 
 # Default rules for deployment.
 

@@ -14,7 +14,7 @@
 class DataParser:public QObject {
     Q_OBJECT
 public:
-    DataParser(QString const &dir,main_window* mainwindow) : mainwindow(mainwindow),rootPath(dir) {
+    DataParser(QString const &dir) : rootPath(dir) {
         //no actions
     }
 
@@ -22,23 +22,28 @@ public:
     inline QMap <QByteArray, QVector<QString>> getDublicateMap() {
         return dublicateMap;
     }
-
     DataParser();
-
     void setDir(const QString &dir);
-
+     QString rootPath;
+     void stop();
 private:
+    DataParser* worker;
+    QThread* thread;
     void clear();
     QByteArray getHash(QString &file_info);
 
 private:
-    main_window* mainwindow;
+    bool isStopped = false;
     QMap <QByteArray, QVector<QString>> dublicateMap;
     QMap <qint64, QVector<QString>> dublicateSizeMap;
-    QString rootPath;
-    public
-         slots:
-    void find_dublicate(QString const &dir);
+
+public slots:
+    void find_dublicate();
+signals:
+    void filesCounted(int);
+    void filesChecked(int);
+    void finished(int);
+    void error(QString err);
 };
 
 #endif // DATA_SECTION_H

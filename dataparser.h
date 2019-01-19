@@ -11,38 +11,45 @@
 #include <qmessagebox.h>
 #include <mainwindow.h>
 #include <qdebug.h>
-class DataParser:public QObject {
-    Q_OBJECT
+
+class DataParser : public QObject {
+Q_OBJECT
 public:
     DataParser(QString const &dir) : rootPath(dir) {
         //no actions
     }
 
 //GETTER
-    inline QMap <QByteArray, QVector<QString>> getDublicateMap() {
-        return dublicateMap;
+    inline QMap<QByteArray, QVector<QString>> getDuplicateMap() {
+        return duplicateMap;
     }
+
     DataParser();
-    void setDir(const QString &dir);
-     QString rootPath;
-     void stop();
-private:
-    DataParser* worker;
-    QThread* thread;
-    void clear();
+
     QByteArray getHash(QString &file_info);
 
+    void setDir(const QString &dir);
+
+    QString rootPath;
 private:
-    bool isStopped = false;
-    QMap <QByteArray, QVector<QString>> dublicateMap;
-    QMap <qint64, QVector<QString>> dublicateSizeMap;
+    void clear();
+
+private:
+    QMap<QByteArray, QVector<QString>> duplicateMap;
+    QMap<qint64, QVector<QString>> duplicateSizeMap;
 
 public slots:
+
     void find_dublicate();
+
 signals:
+
     void filesCounted(int);
+
     void filesChecked(int);
+
     void finished(int);
+
     void error(QString err);
 };
 

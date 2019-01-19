@@ -34,21 +34,18 @@ bool MyTreeWidget::checkItem(ACTION action) {
         QMessageBox::warning(this, "Select file", "Select file", QMessageBox::Ok);
         return false;
     }
-    if (QMessageBox::warning(this, "Deleting",
-                             QString("Do you really want to delete %1").arg(
-                                     action == ACTION::THIS ? "file %1" : "dublicates of \n\n %1").arg(
-                                     getItemName(selectedFile)),
-                             QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel) {
-        return false;
-    }
-    return true;
+    return !(QMessageBox::warning(this, "Deleting",
+                                  QString("Do you really want to delete %1").arg(
+                                 action == ACTION::THIS ? "file %1" : "dublicates of \n\n %1").arg(
+                                 getItemName(selectedFile)),
+                         QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel);
 }
 
 void MyTreeWidget::fileSelected(QTreeWidgetItem *curFile) {
    selectedFile = curFile;
 }
 
-void MyTreeWidget::deleteDublicate(ACTION action) {
+void MyTreeWidget::deleteDuplicate(ACTION action) {
     if (!checkItem(action))
         return;
     if (action == THIS) {
@@ -100,7 +97,7 @@ void MyTreeWidget::removeFile(QTreeWidgetItem *child) {
 }
 
 void MyTreeWidget::scan_directory(QString const &dir) {
-    isCurMain = false;
+    mainwindow->setModeType(false);
     auto *thread = new QThread();
     worker = new DataParser(dir);
     auto *progressWindow = new ProgressDialog(thread, this);
@@ -127,7 +124,7 @@ void MyTreeWidget::show(){
     qDebug()<<"kek";
     clear();
     bool isDublicate = false;
-    for (auto& comp : worker->getDublicateMap()) {
+    for (auto& comp : worker->getDuplicateMap()) {
         if (comp.size() < 2) continue;
         isDublicate = true;
         QTreeWidgetItem *group = new QTreeWidgetItem();
@@ -152,8 +149,8 @@ void MyTreeWidget::show(){
 
     selectedFile = nullptr;
     if (!isDublicate) {
+         mainwindow->setModeType(true);
         noDublicatesMessage(worker->rootPath);
-        isCurMain = true;
     }
     isButtomsWorks = true;
     delete worker;
@@ -171,18 +168,23 @@ void MyTreeWidget::onTreeWidgetClicked() {
         newOdj = newOdj.mid(1);
     }
     QFileInfo tmp(newOdj);
-    if (isCurMain && tmp.isDir()) {
+    if (mainwindow->getModeType() && tmp.isDir()) {
             currentDir = newOdj;
-            makeFileSystem();
+            mainwindow->makeFileSystem();
             return;
     }
     if (!tmp.isDir()){
-        QDesktopServices::openUrl(QUrl::fromLocalFile(newOdj));
+        if(!QDesktopServices::openUrl(QUrl::fromLocalFile(newOdj))){
+            if (QMessageBox::information(this, "Msg",
+                                         QString("Can't open file \n\n %1").arg(newOdj), QMessageBox::Ok)) {
+                this->close();
+            }
+        }
     }
 }
 
 void MyTreeWidget::noDublicatesMessage(QString const &dir) {
-      makeFileSystem();
+      mainwindow->makeFileSystem();
     if (QMessageBox::information(this, "Msg",
                                  QString("No duplicated files found in directory:\n\n %1 \n\nDo you want to exit from application?").arg(
                                          dir), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
@@ -206,10 +208,10 @@ void MyTreeWidget::keyPressEvent(QKeyEvent * event){
     if ( event->key() == Qt::Key(1040)||  event->key() ==Qt::Key_F){
         mainwindow->scan_directory();
     }
-    if ( event->key() == Qt::Key_Escape && !isCurMain){
+    if ( event->key() == Qt::Key_Escape && !mainwindow->getModeType()){
         mainwindow->makeFileSystem();
     }
-    if ( event->key() == Qt::Key_Escape && isCurMain){
+    if ( event->key() == Qt::Key_Escape && mainwindow->getModeType()){
         currentDir.truncate(currentDir.lastIndexOf("/"));
         if(currentDir.size()==0){
             currentDir = "/";
@@ -217,7 +219,7 @@ void MyTreeWidget::keyPressEvent(QKeyEvent * event){
         mainwindow->makeFileSystem();
     }
     qDebug() << Qt::Key(event->key());
-    if(Qt::Key(event->key()) == Qt::Key_Backspace && !isCurMain){
+    if(Qt::Key(event->key()) == Qt::Key_Backspace && !mainwindow->getModeType()){
         mainwindow->deleteCurrent();
     }
     QTreeWidget::keyPressEvent(event);

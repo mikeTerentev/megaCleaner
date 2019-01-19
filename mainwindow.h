@@ -21,6 +21,14 @@ public:
 
     ~main_window();
 
+    void setModeType(bool b) {
+        isCurMain = b;
+    }
+
+    bool getModeType(){
+        return isCurMain;
+    }
+
 
 public
     slots:

@@ -48,13 +48,6 @@ public:
         currentDir = x;
     }
 
-    void setModeType(bool b) {
-        isCurMain = b;
-    }
-
-    bool getModeType(){
-        return isCurMain;
-    }
 
     void setSelectedFile(QTreeWidgetItem *x) {
         selectedFile = x;
@@ -63,7 +56,7 @@ public:
  public slots:
     void onTreeWidgetClicked();
 
-    void deleteDublicate(ACTION action);
+    void deleteDuplicate(ACTION action);
 
     void fileSelected(QTreeWidgetItem *curFile);
 
@@ -71,7 +64,7 @@ public:
 
      void show();
 private:
-    bool isCurMain = true;
+
     bool isButtomsWorks =true;
     bool checkItem(ACTION action);
     main_window* mainwindow;

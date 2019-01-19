@@ -28,12 +28,12 @@ void DataParser::find_dublicate() {
        // qDebug()<<file.absoluteFilePath();
         QString x(file.fileName());
         if (file.isSymLink()) continue;
-           dublicateSizeMap[file.size()].push_back(file.absoluteFilePath());
+           duplicateSizeMap[file.size()].push_back(file.absoluteFilePath());
            numFiles++;
     }
     emit filesCounted(numFiles);
     int hashedNum=0;
-    for (auto& currGroup : dublicateSizeMap){
+    for (auto& currGroup : duplicateSizeMap){
         if (currGroup.count() < 2) continue;
         for (auto& fileDir : currGroup){
             if (QThread::currentThread()->isInterruptionRequested()){
@@ -42,7 +42,7 @@ void DataParser::find_dublicate() {
             }
             QByteArray fileHash = getHash(fileDir);
             if (fileHash == "") continue;
-            dublicateMap[fileHash].push_back(fileDir);
+            duplicateMap[fileHash].push_back(fileDir);
             emit filesChecked(++hashedNum);
         }
     }
@@ -50,10 +50,7 @@ void DataParser::find_dublicate() {
 }
 
 void DataParser::clear() {
-    dublicateMap.clear();
-}
-void  DataParser::stop(){
-    isStopped = true;
+    duplicateMap.clear();
 }
 
 //strace fdupes

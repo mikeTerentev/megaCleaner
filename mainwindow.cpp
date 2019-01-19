@@ -39,22 +39,23 @@ main_window::~main_window() {}
 
 void main_window::makeItemUnique() {
     ui->treeWidget->setSelectedFile(ui->treeWidget->currentItem());
-    ui->treeWidget->deleteDublicate(ACTION::EXCEPT_THIS);
+    ui->treeWidget->deleteDuplicate(ACTION::EXCEPT_THIS);
 }
 
 void main_window::deleteCurrent() {
-    ui->treeWidget->deleteDublicate(ACTION::THIS);
+    ui->treeWidget->deleteDuplicate(ACTION::THIS);
 }
 
 void main_window::makeFileSystem() {
-    ui->treeWidget->setModeType(true);
+    setModeType(true);
     genButtoms(true);
     ui->treeWidget->makeFileSystem();
 }
 
 void main_window::scan_directory() {
     ui->treeWidget->scan_directory(ui->treeWidget->getCurrDir());
-    genButtoms(ui->treeWidget->getModeType());
+    genButtoms(getModeType());
+    qDebug()<<getModeType();
 }
 
 
@@ -68,5 +69,5 @@ void main_window::genButtoms(bool isMainWindow) {
     ui->pushDeleteCurrent->setVisible(!isMainWindow);
     ui->pushScanDir->setVisible(isMainWindow);
     isCurMain = isMainWindow;
-    ui->treeWidget->setModeType(isMainWindow);
+    setModeType(isMainWindow);
 }

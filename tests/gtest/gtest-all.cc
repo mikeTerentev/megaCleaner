@@ -36,7 +36,7 @@
 
 // This line ensures that gtest.h can be compiled on its own, even
 // when it's fused.
-#include <gtest/gtest.h>
+#include <tests/gtest/gtest.h>
 
 // The following lines pull in the real gtest *.cc files.
 // Copyright 2005, Google Inc.
@@ -1441,7 +1441,7 @@ bool ParseNaturalNumber(const ::std::string& str, Integer* number) {
 }
 #endif  // GTEST_HAS_DEATH_TEST
 
-// TestResult contains some private methods that should be hidden from
+// TestResult contains some private methods that should be hidden-files from
 // Google Test user but are required for testing. This class allow our tests
 // to access them.
 //
